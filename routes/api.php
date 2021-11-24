@@ -3,7 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +21,21 @@ use App\Http\Controllers\AuthorController;
 */
 
 //Route::get('/me', [AuthController::class, 'me']);
-Route::post('/create', [AuthorController::class, 'create']);
-Route::get('/read/{id?}', [AuthorController::class, 'read']);
-Route::put('/update', [AuthorController::class, 'update']);
-Route::delete('/delete/{id}', [AuthorController::class, 'delete']);
+
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/read/{id?}', [BookController::class, 'read']);
+Route::get('/readAuth/{id?}', [AuthorController::class, 'read']);
+Route::post('/create', [BookController::class, 'create']);  
+Route::put('/update', [BookController::class, 'update']);
+Route::delete('/delete/{id}', [BookController::class, 'delete']);
+Route::post('/createAuth', [AuthorController::class, 'create']);
+Route::put('/updateAuth', [AuthorController::class, 'update']);
+Route::delete('/deleteAuth/{id}', [AuthorController::class, 'delete']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::post('/logout', [AuthController::class, 'logout']);
+  Route::post('/me', [AuthController::class, 'me']);
+});
